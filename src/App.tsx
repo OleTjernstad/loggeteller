@@ -1,24 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import CssBaseline from "@mui/material/CssBaseline";
+import { useState } from "react";
+import "./App.css";
+import { Caches } from "./pages/caches";
 
 function App() {
+  const [page, setPage] = useState<"results" | "caches" | "logs">("caches");
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ display: "flex" }}>
+      <CssBaseline />
+
+      <main>
+        {page === "results" ? (
+          <div />
+        ) : page === "caches" ? (
+          <Caches />
+        ) : page === "logs" ? (
+          <div />
+        ) : (
+          <div />
+        )}
+      </main>
     </div>
   );
 }
