@@ -81,7 +81,7 @@ export function LogDataForm({ addLog }: LogDataFormProps) {
         onChange={(event: any, newValue: string | null) => {
           selectName(newValue);
         }}
-        renderInput={(params) => <TextField {...params} label="freeSolo" />}
+        renderInput={(params) => <TextField {...params} label="Nick" />}
       />
       <TextField
         fullWidth

@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./App.css";
 import { Caches } from "./pages/caches";
 import { Logs } from "./pages/logs";
+import { Results } from "./pages/results";
 
 function App() {
   const [page, setPage] = useState<"results" | "caches" | "logs">("logs");
@@ -12,7 +13,7 @@ function App() {
 
       <main>
         {page === "results" ? (
-          <div />
+          <Results />
         ) : page === "caches" ? (
           <Caches />
         ) : page === "logs" ? (
