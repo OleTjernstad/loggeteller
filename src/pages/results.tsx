@@ -1,10 +1,14 @@
+import "dayjs/locale/nb";
+
+import { Card, CardContent } from "../components/card";
 import { Container, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "../components/card";
-import { LogTable } from "../components/logs";
-import { useEffectOnce } from "../hooks/useEffectOnce";
+
 import { CacheData } from "./caches";
 import { LogData } from "./logs";
+import { LogTable } from "../components/logs";
+import dayjs from "dayjs";
+import { useEffectOnce } from "../hooks/useEffectOnce";
 
 export function Results() {
   const [logs, setLogs] = useState<LogData[]>([]);
@@ -29,7 +33,7 @@ export function Results() {
       const sortedLogs = groupBy(logs, "gc");
 
       for (const cache of caches) {
-        countLogsPrCache(sortedLogs, cache);
+        console.log(countLogsPrCache(sortedLogs, cache));
       }
     }
   }, [caches, logs]);
@@ -76,6 +80,8 @@ function countLogsPrCache(
   const onWeekend = 2;
   const inDecember = 1;
 
+  const logWithPoints: { name: string; point: number; gc: string }[] = [];
+
   const logs = sortedLogs[cache.gc];
 
   const publishDate = new Date(Date.parse(cache.date));
@@ -83,8 +89,16 @@ function countLogsPrCache(
   for (const log of logs) {
     const logDate = new Date(Date.parse(log.date));
 
-    if (logDate === publishDate) {
-      // add onPDay
+    if (dayjs(publishDate).isSame(logDate, "day")) {
+      logWithPoints.push({ name: log.name, gc: log.gc, point: onPDay });
+    } else if (dayjs(publishDate).locale("nb").isSame(logDate, "week")) {
+      const dayOfWeek = logDate.getDay();
+      if (dayOfWeek === 6 || dayOfWeek === 0) {
+        logWithPoints.push({ name: log.name, gc: log.gc, point: onWeekend });
+      }
+    } else {
+      logWithPoints.push({ name: log.name, gc: log.gc, point: inDecember });
     }
   }
+  return logWithPoints;
 }

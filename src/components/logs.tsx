@@ -1,15 +1,15 @@
+import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
+import { LogData } from "../pages/logs";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { useState } from "react";
-import { LogData } from "../pages/logs";
 
 interface LogTableProps {
   data: LogData[];
@@ -54,6 +54,7 @@ export function LogDataForm({ addLog }: LogDataFormProps) {
   const [addedNames, setAddedNames] = useState<string[]>([]);
 
   function selectName(name: string | null) {
+    console.log(name);
     if (name) {
       if (!addedNames.includes(name)) {
         setAddedNames((prev) => {

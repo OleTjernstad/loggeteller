@@ -1,13 +1,13 @@
+import Button from "@mui/material/Button";
+import { CacheData } from "../pages/caches";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { CacheData } from "../pages/caches";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { useState } from "react";
 
 interface CacheTableProps {
@@ -52,6 +52,7 @@ export function CacheDataForm({ addCache }: CacheDataFormProps) {
   return (
     <>
       <TextField
+        fullWidth
         id="outlined-gc"
         label="GC"
         variant="outlined"
@@ -59,6 +60,7 @@ export function CacheDataForm({ addCache }: CacheDataFormProps) {
         onChange={(e) => setGc(e.target.value)}
       />
       <TextField
+        fullWidth
         id="outlined-name"
         label="Navn"
         variant="outlined"
@@ -66,6 +68,7 @@ export function CacheDataForm({ addCache }: CacheDataFormProps) {
         onChange={(e) => setName(e.target.value)}
       />
       <TextField
+        fullWidth
         id="outlined-date"
         label="Publisert dato"
         variant="outlined"
