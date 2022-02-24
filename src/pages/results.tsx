@@ -10,6 +10,11 @@ import { LogTable } from "../components/logs";
 import dayjs from "dayjs";
 import { useEffectOnce } from "../hooks/useEffectOnce";
 
+interface LogWithPoints {
+  name: string;
+  point: number;
+  gc: string;
+}
 export function Results() {
   const [logs, setLogs] = useState<LogData[]>([]);
   useEffectOnce(() => {
@@ -30,11 +35,16 @@ export function Results() {
 
   useEffect(() => {
     if (logs.length > 0 && caches.length > 0) {
+      let logsWithPoints: LogWithPoints[] = [];
       const sortedLogs = groupBy(logs, "gc");
 
       for (const cache of caches) {
-        console.log(countLogsPrCache(sortedLogs, cache));
+        logsWithPoints = [
+          ...logsWithPoints,
+          ...countLogsPrCache(sortedLogs, cache),
+        ];
       }
+      console.log(groupPointsBy(logsWithPoints, "name"));
     }
   }, [caches, logs]);
 
@@ -71,6 +81,22 @@ function groupBy(objectArray: LogData[], property: "gc") {
   }, {});
 }
 
+function groupPointsBy(objectArray: LogWithPoints[], property: "name") {
+  return objectArray.reduce(function (
+    acc: {
+      [key: string]: LogWithPoints[];
+    },
+    obj
+  ) {
+    let key = obj[property];
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(obj);
+    return acc;
+  }, {});
+}
+
 function countLogsPrCache(
   sortedLogs: { [key: string]: LogData[] },
   cache: CacheData
@@ -80,7 +106,7 @@ function countLogsPrCache(
   const onWeekend = 2;
   const inDecember = 1;
 
-  const logWithPoints: { name: string; point: number; gc: string }[] = [];
+  const logWithPoints: LogWithPoints[] = [];
 
   const logs = sortedLogs[cache.gc];
 
