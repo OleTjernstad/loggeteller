@@ -144,7 +144,7 @@ export function Results() {
     <Container>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Card title="Legg til logger">
+          <Card title="Resultater">
             <CardContent>
               <Button
                 onClick={() => pickWinners(1)}
