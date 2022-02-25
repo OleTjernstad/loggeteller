@@ -246,29 +246,31 @@ function countLogsPrCache(
   /**
    * Points for logs
    */
-  for (const log of logs) {
-    const logDate = new Date(Date.parse(log.date));
+  if (logs?.length > 0) {
+    for (const log of logs) {
+      const logDate = new Date(Date.parse(log.date));
 
-    if (dayjs(publishDate).isSame(logDate, "day")) {
-      logWithPoints.push({ name: log.name, gc: log.gc, point: onPDay });
-      for (let i = 0; i < onPDay; i++) {
-        logTickets.push({ name: log.name, number: ticketNumber });
-        ticketNumber++;
-      }
-    } else if (dayjs(publishDate).locale("nb").isSame(logDate, "week")) {
-      const dayOfWeek = logDate.getDay();
-      if (dayOfWeek === 6 || dayOfWeek === 0) {
-        logWithPoints.push({ name: log.name, gc: log.gc, point: onWeekend });
-        for (let i = 0; i < onWeekend; i++) {
+      if (dayjs(publishDate).isSame(logDate, "day")) {
+        logWithPoints.push({ name: log.name, gc: log.gc, point: onPDay });
+        for (let i = 0; i < onPDay; i++) {
           logTickets.push({ name: log.name, number: ticketNumber });
           ticketNumber++;
         }
-      }
-    } else {
-      logWithPoints.push({ name: log.name, gc: log.gc, point: inDecember });
-      for (let i = 0; i < inDecember; i++) {
-        logTickets.push({ name: log.name, number: ticketNumber });
-        ticketNumber++;
+      } else if (dayjs(publishDate).locale("nb").isSame(logDate, "week")) {
+        const dayOfWeek = logDate.getDay();
+        if (dayOfWeek === 6 || dayOfWeek === 0) {
+          logWithPoints.push({ name: log.name, gc: log.gc, point: onWeekend });
+          for (let i = 0; i < onWeekend; i++) {
+            logTickets.push({ name: log.name, number: ticketNumber });
+            ticketNumber++;
+          }
+        }
+      } else {
+        logWithPoints.push({ name: log.name, gc: log.gc, point: inDecember });
+        for (let i = 0; i < inDecember; i++) {
+          logTickets.push({ name: log.name, number: ticketNumber });
+          ticketNumber++;
+        }
       }
     }
   }

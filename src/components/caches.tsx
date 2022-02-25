@@ -24,8 +24,9 @@ export function CacheTable({ data }: CacheTableProps) {
         <TableHead>
           <TableRow>
             <TableCell>GC</TableCell>
-            <TableCell align="right">Navn</TableCell>
-            <TableCell align="right">Publisert dato</TableCell>
+            <TableCell>Navn</TableCell>
+            <TableCell>Publisert dato</TableCell>
+            <TableCell>Utlagt av</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -37,8 +38,9 @@ export function CacheTable({ data }: CacheTableProps) {
               <TableCell component="th" scope="row">
                 {row.gc}
               </TableCell>
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.date}</TableCell>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.date}</TableCell>
+              <TableCell>{row.owner}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -116,7 +118,7 @@ export function CacheDataForm({ addCache }: CacheDataFormProps) {
         }}
         renderInput={(params) => <TextField {...params} label="Nick" />}
       />
-      <Typography>Valgt nick: {name}</Typography>
+      <Typography>Valgt nick: {owner}</Typography>
 
       <Button
         variant="outlined"
