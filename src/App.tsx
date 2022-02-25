@@ -12,7 +12,18 @@ function App() {
       <CssBaseline />
 
       <div style={{ flex: 1, alignItems: "center" }}>
-        <main>
+        <nav style={{ padding: 5 }}>
+          <ButtonGroup
+            fullWidth
+            variant="contained"
+            aria-label="outlined primary button group"
+          >
+            <Button onClick={() => setPage("caches")}>Legg til cacher</Button>
+            <Button onClick={() => setPage("logs")}>Legg til logger</Button>
+            <Button onClick={() => setPage("results")}>Se resultater</Button>
+          </ButtonGroup>
+        </nav>
+        <main style={{ marginTop: 20 }}>
           {page === "results" ? (
             <Results />
           ) : page === "caches" ? (
@@ -23,17 +34,6 @@ function App() {
             <div />
           )}
         </main>
-        <div style={{ width: "100%", alignItems: "center" }}>
-          <ButtonGroup
-            style={{ paddingTop: 20 }}
-            variant="contained"
-            aria-label="outlined primary button group"
-          >
-            <Button onClick={() => setPage("caches")}>Legg til cacher</Button>
-            <Button onClick={() => setPage("logs")}>Legg til logger</Button>
-            <Button onClick={() => setPage("results")}>Se resultater</Button>
-          </ButtonGroup>
-        </div>
       </div>
     </div>
   );
