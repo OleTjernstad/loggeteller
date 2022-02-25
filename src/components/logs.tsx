@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import { LogData } from "../pages/logs";
@@ -9,8 +11,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
 import Typography from "@mui/material/Typography";
+import { useEffectOnce } from "../hooks/useEffectOnce";
+
 interface LogTableProps {
   data: LogData[];
 }
@@ -59,6 +62,7 @@ export function LogDataForm({ addLog }: LogDataFormProps) {
       jsonValue != null ? JSON.parse(jsonValue) : undefined;
     setAddedNames(savedData);
   });
+
   useEffect(() => {
     localStorage.setItem("addedNames", JSON.stringify(addedNames));
   }, [addedNames]);
@@ -85,6 +89,7 @@ export function LogDataForm({ addLog }: LogDataFormProps) {
         value={gc}
         onChange={(e) => setGc(e.target.value)}
       />
+      <Typography>Husk trykk enter</Typography>
       <Autocomplete
         id="name"
         freeSolo
@@ -93,7 +98,6 @@ export function LogDataForm({ addLog }: LogDataFormProps) {
           selectName(newValue);
         }}
         renderInput={(params) => <TextField {...params} label="Nick" />}
-        hint="Husk trykk enter"
       />
       <Typography>Valgt nick: {name}</Typography>
       <TextField

@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 
 import { CacheData } from "./caches";
 import { LogData } from "./logs";
-import { ResultTable } from "../components/results";
+import { ResultTable } from "../components/points";
 import dayjs from "dayjs";
 import { useEffectOnce } from "../hooks/useEffectOnce";
 
-interface LogWithPoints {
+export interface LogWithPoints {
   name: string;
   point: number;
   gc: string;
@@ -68,7 +68,9 @@ export function Results() {
         <Grid item xs={12}>
           <Card title="Legg til logger">
             <CardContent>
-              <ResultTable logsByName={logsByName} caches={caches} />
+              {logsByName && (
+                <ResultTable logsByName={logsByName} caches={caches} />
+              )}
             </CardContent>
           </Card>
         </Grid>

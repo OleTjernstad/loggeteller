@@ -1,6 +1,5 @@
-import Autocomplete from "@mui/material/Autocomplete";
-import Button from "@mui/material/Button";
-import { LogData } from "../pages/logs";
+import { CacheData } from "../pages/caches";
+import { LogWithPoints } from "../pages/results";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,8 +7,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TextField from "@mui/material/TextField";
-import { useState } from "react";
 
 interface ResultTableProps {
   logsByName: {
@@ -30,13 +27,13 @@ export function ResultTable({ logsByName, caches }: ResultTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.entries(logsByName).map((row) => (
+          {Object.entries(logsByName).map(([key, row]) => (
             <TableRow
-              key={i}
+              key={key}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {row[0].name}
               </TableCell>
               {caches.map((c) => {
                 const cache = row.find((r) => r.gc === c.gc);
