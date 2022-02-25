@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 import { CacheData } from "./caches";
 import { LogData } from "./logs";
-import { LogTable } from "../components/logs";
+import { ResultTable } from "../components/results";
 import dayjs from "dayjs";
 import { useEffectOnce } from "../hooks/useEffectOnce";
 
@@ -16,7 +16,11 @@ interface LogWithPoints {
   gc: string;
 }
 export function Results() {
+  /**
+   * Log data
+   */
   const [logs, setLogs] = useState<LogData[]>([]);
+
   useEffectOnce(() => {
     const jsonValue = localStorage.getItem("logs");
     const savedData: LogData[] =
@@ -24,6 +28,9 @@ export function Results() {
     setLogs(savedData);
   });
 
+  /**
+   * Cache Date
+   */
   const [caches, setCaches] = useState<CacheData[]>([]);
 
   useEffectOnce(() => {
@@ -32,6 +39,13 @@ export function Results() {
       jsonValue != null ? JSON.parse(jsonValue) : undefined;
     setCaches(savedData);
   });
+
+  /**
+   * Log points data
+   */
+  const [logsByName, setLogsByName] = useState<{
+    [key: string]: LogWithPoints[];
+  }>();
 
   useEffect(() => {
     if (logs.length > 0 && caches.length > 0) {
@@ -44,7 +58,7 @@ export function Results() {
           ...countLogsPrCache(sortedLogs, cache),
         ];
       }
-      console.log(groupPointsBy(logsWithPoints, "name"));
+      setLogsByName(groupPointsBy(logsWithPoints, "name"));
     }
   }, [caches, logs]);
 
@@ -54,9 +68,7 @@ export function Results() {
         <Grid item xs={12}>
           <Card title="Legg til logger">
             <CardContent>
-              <br />
-              <br />
-              <LogTable data={logs} />
+              <ResultTable logsByName={logsByName} caches={caches} />
             </CardContent>
           </Card>
         </Grid>
