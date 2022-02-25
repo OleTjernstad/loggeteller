@@ -1,5 +1,11 @@
+import { LogTickets, LogWithPoints } from "../pages/results";
+
 import { CacheData } from "../pages/caches";
-import { LogWithPoints } from "../pages/results";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -44,5 +50,22 @@ export function ResultTable({ logsByName, caches }: ResultTableProps) {
         </TableBody>
       </Table>
     </TableContainer>
+  );
+}
+interface TicketListProps {
+  tickets: LogTickets[];
+}
+export function TicketList({ tickets }: TicketListProps) {
+  return (
+    <List dense>
+      {tickets.map((t) => (
+        <ListItem>
+          <ListItemButton>
+            <ListItemIcon>{t.number}</ListItemIcon>
+            <ListItemText primary={t.name} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
   );
 }

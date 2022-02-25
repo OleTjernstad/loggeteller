@@ -2,11 +2,11 @@ import "dayjs/locale/nb";
 
 import { Card, CardContent } from "../components/card";
 import { Container, Grid } from "@mui/material";
+import { ResultTable, TicketList } from "../components/points";
 import { useEffect, useState } from "react";
 
 import { CacheData } from "./caches";
 import { LogData } from "./logs";
-import { ResultTable } from "../components/points";
 import dayjs from "dayjs";
 import { useEffectOnce } from "../hooks/useEffectOnce";
 
@@ -15,6 +15,11 @@ export interface LogWithPoints {
   point: number;
   gc: string;
 }
+export interface LogTickets {
+  name: string;
+  number: number;
+}
+let ticketNumber = 1;
 export function Results() {
   /**
    * Log data
@@ -47,16 +52,23 @@ export function Results() {
     [key: string]: LogWithPoints[];
   }>();
 
+  const [logsTickets, setLogsTickets] = useState<LogTickets[]>([]);
+
   useEffect(() => {
     if (logs.length > 0 && caches.length > 0) {
       let logsWithPoints: LogWithPoints[] = [];
+
       const sortedLogs = groupBy(logs, "gc");
 
       for (const cache of caches) {
-        logsWithPoints = [
-          ...logsWithPoints,
-          ...countLogsPrCache(sortedLogs, cache),
-        ];
+        const { logTickets, logWithPoints } = countLogsPrCache(
+          sortedLogs,
+          cache
+        );
+        logsWithPoints = [...logsWithPoints, ...logWithPoints];
+        setLogsTickets((prev) => {
+          return [...prev, ...logTickets];
+        });
       }
       setLogsByName(groupPointsBy(logsWithPoints, "name"));
     }
@@ -71,6 +83,9 @@ export function Results() {
               {logsByName && (
                 <ResultTable logsByName={logsByName} caches={caches} />
               )}
+              <br />
+              <br />
+              <TicketList tickets={logsTickets} />
             </CardContent>
           </Card>
         </Grid>
@@ -121,6 +136,7 @@ function countLogsPrCache(
   const inDecember = 1;
 
   const logWithPoints: LogWithPoints[] = [];
+  const logTickets: LogTickets[] = [];
 
   const logs = sortedLogs[cache.gc];
 
@@ -131,14 +147,26 @@ function countLogsPrCache(
 
     if (dayjs(publishDate).isSame(logDate, "day")) {
       logWithPoints.push({ name: log.name, gc: log.gc, point: onPDay });
+      for (let i = 0; i < onPDay; i++) {
+        logTickets.push({ name: log.name, number: ticketNumber });
+        ticketNumber++;
+      }
     } else if (dayjs(publishDate).locale("nb").isSame(logDate, "week")) {
       const dayOfWeek = logDate.getDay();
       if (dayOfWeek === 6 || dayOfWeek === 0) {
         logWithPoints.push({ name: log.name, gc: log.gc, point: onWeekend });
+        for (let i = 0; i < onWeekend; i++) {
+          logTickets.push({ name: log.name, number: ticketNumber });
+          ticketNumber++;
+        }
       }
     } else {
       logWithPoints.push({ name: log.name, gc: log.gc, point: inDecember });
+      for (let i = 0; i < inDecember; i++) {
+        logTickets.push({ name: log.name, number: ticketNumber });
+        ticketNumber++;
+      }
     }
   }
-  return logWithPoints;
+  return { logWithPoints, logTickets };
 }
