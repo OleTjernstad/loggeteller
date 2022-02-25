@@ -10,7 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
-
+import Typography from "@mui/material/Typography";
 interface LogTableProps {
   data: LogData[];
 }
@@ -83,7 +83,9 @@ export function LogDataForm({ addLog }: LogDataFormProps) {
           selectName(newValue);
         }}
         renderInput={(params) => <TextField {...params} label="Nick" />}
+        hint="Husk trykk enter"
       />
+      <Typography>Valgt nick: {name}</Typography>
       <TextField
         fullWidth
         id="outlined-date"
