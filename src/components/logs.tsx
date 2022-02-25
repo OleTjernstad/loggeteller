@@ -53,6 +53,16 @@ export function LogDataForm({ addLog }: LogDataFormProps) {
 
   const [addedNames, setAddedNames] = useState<string[]>([]);
 
+  useEffectOnce(() => {
+    const jsonValue = localStorage.getItem("addedNames");
+    const savedData: string[] =
+      jsonValue != null ? JSON.parse(jsonValue) : undefined;
+    setAddedNames(savedData);
+  });
+  useEffect(() => {
+    localStorage.setItem("addedNames", JSON.stringify(addedNames));
+  }, [addedNames]);
+
   function selectName(name: string | null) {
     console.log(name);
     if (name) {
