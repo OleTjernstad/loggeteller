@@ -28,7 +28,7 @@ export function ResultTable({ logsByName, caches }: ResultTableProps) {
           <TableRow>
             <TableCell>Navn</TableCell>
             {caches.map((c) => (
-              <TableCell>{c.gc}</TableCell>
+              <TableCell key={c.gc}>{c.gc}</TableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -43,7 +43,9 @@ export function ResultTable({ logsByName, caches }: ResultTableProps) {
               </TableCell>
               {caches.map((c) => {
                 const cache = row.find((r) => r.gc === c.gc);
-                return <TableCell>{cache?.point}</TableCell>;
+                return (
+                  <TableCell key={`${key}-${c.gc}`}>{cache?.point}</TableCell>
+                );
               })}
             </TableRow>
           ))}
@@ -59,7 +61,7 @@ export function TicketList({ tickets }: TicketListProps) {
   return (
     <List dense>
       {tickets.map((t) => (
-        <ListItem>
+        <ListItem key={t.number}>
           <ListItemButton>
             <ListItemIcon>{t.number}</ListItemIcon>
             <ListItemText primary={t.name} />

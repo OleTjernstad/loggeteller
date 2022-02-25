@@ -1,7 +1,7 @@
 import "dayjs/locale/nb";
 
+import { Button, Container, Grid, Typography } from "@mui/material";
 import { Card, CardContent } from "../components/card";
-import { Container, Grid } from "@mui/material";
 import { ResultTable, TicketList } from "../components/points";
 import { useEffect, useState } from "react";
 
@@ -20,6 +20,7 @@ export interface LogTickets {
   number: number;
 }
 let ticketNumber = 1;
+let loopPicking = 0;
 export function Results() {
   /**
    * Log data
@@ -74,12 +75,103 @@ export function Results() {
     }
   }, [caches, logs]);
 
+  const [firstPlace, setFirstPlace] = useState<number>();
+  const [secondPlace, setSecondPlace] = useState<number>();
+  const [thirdPlace, setThirdPlace] = useState<number>();
+
+  function pickWinners(place: number) {
+    loopPicking = 0;
+    switch (place) {
+      case 1:
+        findFirstPlace();
+        break;
+      case 2:
+        findSecondPlace();
+        break;
+      case 3:
+        findThirdPlace();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function findFirstPlace() {
+    const myTimeout = setTimeout(() => {
+      setFirstPlace(Math.floor(Math.random() * logsTickets.length));
+      loopPicking++;
+      if (loopPicking < 10) {
+        findFirstPlace();
+      } else {
+        pickWinners(2);
+      }
+
+      clearTimeout(myTimeout);
+    }, 500);
+  }
+  function findSecondPlace() {
+    const myTimeout = setTimeout(() => {
+      setSecondPlace(Math.floor(Math.random() * logsTickets.length));
+      loopPicking++;
+      if (loopPicking < 10) {
+        findSecondPlace();
+      } else {
+        pickWinners(3);
+      }
+
+      clearTimeout(myTimeout);
+    }, 500);
+  }
+  function findThirdPlace() {
+    const myTimeout = setTimeout(() => {
+      setThirdPlace(Math.floor(Math.random() * logsTickets.length));
+      loopPicking++;
+      if (loopPicking < 10) {
+        findThirdPlace();
+      }
+      clearTimeout(myTimeout);
+    }, 500);
+  }
+
+  const NameOfWinner = ({ place }: { place: number }) => {
+    const winner = logsTickets.find((l) => l.number === place);
+    if (winner) return <>{winner.name}</>;
+    return <></>;
+  };
+
   return (
     <Container>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Card title="Legg til logger">
             <CardContent>
+              <Button
+                onClick={() => pickWinners(1)}
+                variant="outlined"
+                fullWidth
+              >
+                Trekk vinnere
+              </Button>
+              <br />
+              {firstPlace !== undefined && (
+                <Typography>
+                  1. {firstPlace + 1}: <NameOfWinner place={firstPlace + 1} />
+                </Typography>
+              )}
+              <br />
+              {secondPlace !== undefined && (
+                <Typography>
+                  2. {secondPlace + 1}: <NameOfWinner place={secondPlace + 1} />
+                </Typography>
+              )}
+              <br />
+              {thirdPlace !== undefined && (
+                <Typography>
+                  3. {thirdPlace + 1}: <NameOfWinner place={thirdPlace + 1} />
+                </Typography>
+              )}
+              <br />
               {logsByName && (
                 <ResultTable logsByName={logsByName} caches={caches} />
               )}
