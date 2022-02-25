@@ -142,6 +142,18 @@ function countLogsPrCache(
 
   const publishDate = new Date(Date.parse(cache.date));
 
+  /**
+   * Points to owner
+   */
+  logWithPoints.push({ name: cache.owner, gc: cache.gc, point: owner });
+  for (let i = 0; i < owner; i++) {
+    logTickets.push({ name: cache.owner, number: ticketNumber });
+    ticketNumber++;
+  }
+
+  /**
+   * Points for logs
+   */
   for (const log of logs) {
     const logDate = new Date(Date.parse(log.date));
 

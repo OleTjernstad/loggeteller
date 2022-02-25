@@ -1,20 +1,22 @@
-import { Container, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
 import { CacheDataForm, CacheTable } from "../components/caches";
 import { Card, CardContent } from "../components/card";
+import { Container, Grid } from "@mui/material";
+import { useEffect, useState } from "react";
+
 import { useEffectOnce } from "../hooks/useEffectOnce";
 
 export interface CacheData {
   gc: string;
   name: string;
   date: string;
+  owner: string;
 }
 export function Caches() {
   const [caches, setCaches] = useState<CacheData[]>([]);
 
-  function addCache(gc: string, name: string, date: string) {
+  function addCache(gc: string, name: string, date: string, owner: string) {
     setCaches((prev) => {
-      return [...prev, { gc, name, date }];
+      return [...prev, { gc, name, date, owner }];
     });
   }
 

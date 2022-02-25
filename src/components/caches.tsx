@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+
+import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import { CacheData } from "../pages/caches";
 import Paper from "@mui/material/Paper";
@@ -8,7 +11,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import Typography from "@mui/material/Typography";
+import { useEffectOnce } from "../hooks/useEffectOnce";
 
 interface CacheTableProps {
   data: CacheData[];
@@ -43,12 +47,39 @@ export function CacheTable({ data }: CacheTableProps) {
   );
 }
 interface CacheDataFormProps {
-  addCache: (gc: string, name: string, date: string) => void;
+  addCache: (gc: string, name: string, date: string, owner: string) => void;
 }
 export function CacheDataForm({ addCache }: CacheDataFormProps) {
   const [gc, setGc] = useState<string>("");
   const [name, setName] = useState<string>("");
+  const [owner, setOwner] = useState<string>("");
   const [date, setDate] = useState<string>("");
+
+  const [addedNames, setAddedNames] = useState<string[]>([]);
+
+  useEffectOnce(() => {
+    const jsonValue = localStorage.getItem("addedNames");
+    const savedData: string[] =
+      jsonValue != null ? JSON.parse(jsonValue) : undefined;
+    setAddedNames(savedData);
+  });
+
+  useEffect(() => {
+    localStorage.setItem("addedNames", JSON.stringify(addedNames));
+  }, [addedNames]);
+
+  function selectName(name: string | null) {
+    console.log(name);
+    if (name) {
+      if (!addedNames.includes(name)) {
+        setAddedNames((prev) => {
+          return [...prev, name];
+        });
+      }
+      setOwner(name);
+    }
+  }
+
   return (
     <>
       <TextField
@@ -75,10 +106,21 @@ export function CacheDataForm({ addCache }: CacheDataFormProps) {
         value={date}
         onChange={(e) => setDate(e.target.value)}
       />
+      <Typography>Husk trykk enter</Typography>
+      <Autocomplete
+        id="name"
+        freeSolo
+        options={addedNames.map((option) => option)}
+        onChange={(event: any, newValue: string | null) => {
+          selectName(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} label="Nick" />}
+      />
+      <Typography>Valgt nick: {name}</Typography>
 
       <Button
         variant="outlined"
-        onClick={() => addCache(gc, name, date)}
+        onClick={() => addCache(gc, name, date, owner)}
         fullWidth
       >
         Legg til
