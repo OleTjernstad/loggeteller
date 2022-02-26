@@ -26,29 +26,39 @@ export function ResultTable({ logsByName, caches }: ResultTableProps) {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Navn</TableCell>
+            <TableCell component="th">Navn</TableCell>
             {caches.map((c) => (
-              <TableCell key={c.gc}>{c.gc}</TableCell>
+              <TableCell component="th" key={c.gc}>
+                {c.gc}
+              </TableCell>
             ))}
+            <TableCell component="th">Totalt</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.entries(logsByName).map(([key, row]) => (
-            <TableRow
-              key={key}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row[0].name}
-              </TableCell>
-              {caches.map((c) => {
-                const cache = row.find((r) => r.gc === c.gc);
-                return (
-                  <TableCell key={`${key}-${c.gc}`}>{cache?.point}</TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
+          {Object.entries(logsByName).map(([key, row]) => {
+            let points = 0;
+            return (
+              <TableRow
+                key={key}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row[0].name}
+                </TableCell>
+                {caches.map((c) => {
+                  const cache = row.find((r) => r.gc === c.gc);
+                  if (cache) {
+                    points = points + cache.point;
+                  }
+                  return (
+                    <TableCell key={`${key}-${c.gc}`}>{cache?.point}</TableCell>
+                  );
+                })}
+                <TableCell>{points}</TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
