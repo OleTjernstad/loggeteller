@@ -147,6 +147,7 @@ export function Results() {
           <Card title="Resultater">
             <CardContent>
               <Button
+                className="noprint"
                 onClick={() => pickWinners(1)}
                 variant="outlined"
                 fullWidth

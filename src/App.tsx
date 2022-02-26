@@ -1,3 +1,5 @@
+import "./app.css";
+
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { Caches } from "./pages/caches";
@@ -12,7 +14,7 @@ function App() {
       <CssBaseline />
 
       <div style={{ flex: 1, alignItems: "center" }}>
-        <nav style={{ padding: 5 }}>
+        <nav className="noprint" style={{ padding: 5 }}>
           <ButtonGroup
             fullWidth
             variant="contained"
