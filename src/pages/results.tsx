@@ -29,8 +29,7 @@ export function Results() {
 
   useEffectOnce(() => {
     const jsonValue = localStorage.getItem("logs");
-    const savedData: LogData[] =
-      jsonValue != null ? JSON.parse(jsonValue) : undefined;
+    const savedData: LogData[] = jsonValue != null ? JSON.parse(jsonValue) : [];
     setLogs(savedData);
   });
 
@@ -42,7 +41,7 @@ export function Results() {
   useEffectOnce(() => {
     const jsonValue = localStorage.getItem("caches");
     const savedData: CacheData[] =
-      jsonValue != null ? JSON.parse(jsonValue) : undefined;
+      jsonValue != null ? JSON.parse(jsonValue) : [];
     setCaches(savedData);
   });
 
@@ -57,6 +56,8 @@ export function Results() {
 
   useEffect(() => {
     if (logs.length > 0 && caches.length > 0) {
+      setLogsTickets([]);
+
       let logsWithPoints: LogWithPoints[] = [];
 
       const sortedLogs = groupBy(logs, "gc");

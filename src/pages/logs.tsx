@@ -1,7 +1,8 @@
-import { Container, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
 import { Card, CardContent } from "../components/card";
+import { Container, Grid } from "@mui/material";
 import { LogDataForm, LogTable } from "../components/logs";
+import { useEffect, useState } from "react";
+
 import { useEffectOnce } from "../hooks/useEffectOnce";
 
 export interface LogData {
@@ -20,8 +21,7 @@ export function Logs() {
 
   useEffectOnce(() => {
     const jsonValue = localStorage.getItem("logs");
-    const savedData: LogData[] =
-      jsonValue != null ? JSON.parse(jsonValue) : undefined;
+    const savedData: LogData[] = jsonValue != null ? JSON.parse(jsonValue) : [];
     setLogs(savedData);
   });
   useEffect(() => {

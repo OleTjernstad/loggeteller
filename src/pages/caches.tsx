@@ -23,7 +23,7 @@ export function Caches() {
   useEffectOnce(() => {
     const jsonValue = localStorage.getItem("caches");
     const savedData: CacheData[] =
-      jsonValue != null ? JSON.parse(jsonValue) : undefined;
+      jsonValue != null ? JSON.parse(jsonValue) : [];
     setCaches(savedData);
   });
   useEffect(() => {
