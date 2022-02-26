@@ -82,15 +82,16 @@ export function Results() {
 
   function pickWinners(place: number) {
     loopPicking = 0;
+    const numberIfLoops = Math.floor(Math.random() * 20) + 5;
     switch (place) {
       case 1:
-        findFirstPlace();
+        findFirstPlace(numberIfLoops);
         break;
       case 2:
-        findSecondPlace();
+        findSecondPlace(numberIfLoops);
         break;
       case 3:
-        findThirdPlace();
+        findThirdPlace(numberIfLoops);
         break;
 
       default:
@@ -98,41 +99,41 @@ export function Results() {
     }
   }
 
-  function findFirstPlace() {
+  function findFirstPlace(numberIfLoops: number) {
     const myTimeout = setTimeout(() => {
       setFirstPlace(Math.floor(Math.random() * logsTickets.length));
       loopPicking++;
-      if (loopPicking < 10) {
-        findFirstPlace();
+      if (loopPicking < numberIfLoops) {
+        findFirstPlace(numberIfLoops);
       } else {
         pickWinners(2);
       }
 
       clearTimeout(myTimeout);
-    }, 500);
+    }, 200);
   }
-  function findSecondPlace() {
+  function findSecondPlace(numberIfLoops: number) {
     const myTimeout = setTimeout(() => {
       setSecondPlace(Math.floor(Math.random() * logsTickets.length));
       loopPicking++;
-      if (loopPicking < 10) {
-        findSecondPlace();
+      if (loopPicking < numberIfLoops) {
+        findSecondPlace(numberIfLoops);
       } else {
         pickWinners(3);
       }
 
       clearTimeout(myTimeout);
-    }, 500);
+    }, 200);
   }
-  function findThirdPlace() {
+  function findThirdPlace(numberIfLoops: number) {
     const myTimeout = setTimeout(() => {
       setThirdPlace(Math.floor(Math.random() * logsTickets.length));
       loopPicking++;
-      if (loopPicking < 10) {
-        findThirdPlace();
+      if (loopPicking < numberIfLoops) {
+        findThirdPlace(numberIfLoops);
       }
       clearTimeout(myTimeout);
-    }, 500);
+    }, 200);
   }
 
   const NameOfWinner = ({ place }: { place: number }) => {
