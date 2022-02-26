@@ -23,7 +23,7 @@ interface ResultTableProps {
 export function ResultTable({ logsByName, caches }: ResultTableProps) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table size="small" sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell component="th">Navn</TableCell>
