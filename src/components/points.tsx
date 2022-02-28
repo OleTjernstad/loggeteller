@@ -6,13 +6,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 
 interface ResultTableProps {
   logsByName: {
@@ -22,46 +15,52 @@ interface ResultTableProps {
 }
 export function ResultTable({ logsByName, caches }: ResultTableProps) {
   return (
-    <TableContainer component={Paper}>
-      <Table size="small" sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell component="th">Navn</TableCell>
-            {caches.map((c) => (
-              <TableCell component="th" key={c.gc}>
-                {c.gc}
-              </TableCell>
-            ))}
-            <TableCell component="th">Totalt</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Object.entries(logsByName).map(([key, row]) => {
-            let points = 0;
-            return (
-              <TableRow
-                key={key}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row[0].name}
-                </TableCell>
-                {caches.map((c) => {
-                  const cache = row.find((r) => r.gc === c.gc);
-                  if (cache) {
-                    points = points + cache.point;
-                  }
-                  return (
-                    <TableCell key={`${key}-${c.gc}`}>{cache?.point}</TableCell>
-                  );
-                })}
-                <TableCell>{points}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <table style={{ width: "100%" }}>
+      <thead>
+        <tr style={{ lineHeight: "25px" }}>
+          <th>Navn</th>
+          {caches.map((c) => (
+            <th
+              style={{
+                fontSize: 7,
+                whiteSpace: "nowrap",
+                transform: "rotate(90deg)",
+              }}
+              key={c.gc}
+            >
+              {c.gc}
+            </th>
+          ))}
+          <th
+            style={{
+              fontSize: 7,
+              whiteSpace: "nowrap",
+              transform: "rotate(90deg)",
+            }}
+          >
+            Totalt
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.entries(logsByName).map(([key, row]) => {
+          let points = 0;
+          return (
+            <tr key={key}>
+              <th style={{ fontSize: 9 }}>{row[0].name}</th>
+              {caches.map((c) => {
+                const cache = row.find((r) => r.gc === c.gc);
+                if (cache) {
+                  points = points + cache.point;
+                }
+                return <td key={`${key}-${c.gc}`}>{cache?.point}</td>;
+              })}
+              <td style={{ fontSize: 9 }}>{points}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }
 interface TicketListProps {

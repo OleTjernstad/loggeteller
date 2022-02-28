@@ -3,3 +3,16 @@
     visibility: hidden;
   }
 }
+
+.verticalTableHeader {
+  text-align: center;
+  white-space: nowrap;
+  transform-origin: 50% 50%;
+  transform: rotate(90deg);
+}
+.verticalTableHeader:before {
+  content: "";
+  padding-top: 110%; /* takes width as reference, + 10% for faking some extra padding */
+  display: inline-block;
+  vertical-align: middle;
+}
