@@ -18,13 +18,14 @@ export function ResultTable({ logsByName, caches }: ResultTableProps) {
     <table style={{ width: "100%" }}>
       <thead>
         <tr style={{ lineHeight: "25px" }}>
-          <th>Navn</th>
+          <th style={{ borderBottom: "1px solid black" }}>Navn</th>
           {caches.map((c) => (
             <th
               style={{
                 fontSize: 7,
                 whiteSpace: "nowrap",
                 transform: "rotate(90deg)",
+                borderBottom: "1px solid black",
               }}
               key={c.gc}
             >
@@ -36,6 +37,7 @@ export function ResultTable({ logsByName, caches }: ResultTableProps) {
               fontSize: 7,
               whiteSpace: "nowrap",
               transform: "rotate(90deg)",
+              borderBottom: "1px solid black",
             }}
           >
             Totalt
@@ -47,15 +49,35 @@ export function ResultTable({ logsByName, caches }: ResultTableProps) {
           let points = 0;
           return (
             <tr key={key}>
-              <th style={{ fontSize: 9 }}>{row[0].name}</th>
+              <th style={{ fontSize: 9, borderBottom: "1px solid black" }}>
+                {row[0].name}
+              </th>
               {caches.map((c) => {
                 const cache = row.find((r) => r.gc === c.gc);
                 if (cache) {
                   points = points + cache.point;
                 }
-                return <td key={`${key}-${c.gc}`}>{cache?.point}</td>;
+                return (
+                  <td
+                    style={{
+                      borderBottom: "1px solid black",
+                      textAlign: "end",
+                    }}
+                    key={`${key}-${c.gc}`}
+                  >
+                    {cache?.point}
+                  </td>
+                );
               })}
-              <td style={{ fontSize: 9 }}>{points}</td>
+              <td
+                style={{
+                  fontSize: 9,
+                  borderBottom: "1px solid black",
+                  textAlign: "end",
+                }}
+              >
+                {points}
+              </td>
             </tr>
           );
         })}

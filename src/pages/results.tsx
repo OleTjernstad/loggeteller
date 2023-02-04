@@ -158,19 +158,19 @@ export function Results() {
               </Button>
               <br />
               {firstPlace !== undefined && (
-                <Typography>
+                <Typography style={{ fontSize: 45 }}>
                   1. {firstPlace + 1}: <NameOfWinner place={firstPlace + 1} />
                 </Typography>
               )}
               <br />
               {secondPlace !== undefined && (
-                <Typography>
+                <Typography style={{ fontSize: 45 }}>
                   2. {secondPlace + 1}: <NameOfWinner place={secondPlace + 1} />
                 </Typography>
               )}
               <br />
               {thirdPlace !== undefined && (
-                <Typography>
+                <Typography style={{ fontSize: 45 }}>
                   3. {thirdPlace + 1}: <NameOfWinner place={thirdPlace + 1} />
                 </Typography>
               )}

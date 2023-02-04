@@ -7,8 +7,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Logs } from "./pages/logs";
 import { Results } from "./pages/results";
 import { useState } from "react";
+
 function App() {
-  const [page, setPage] = useState<"results" | "caches" | "logs">("logs");
+  const [page, setPage] = useState<"results" | "caches" | "logs">("results");
   return (
     <div style={{ display: "flex" }}>
       <CssBaseline />
