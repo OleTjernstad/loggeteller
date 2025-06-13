@@ -1,19 +1,17 @@
 "use client";
 
-import { Cache, Log } from "@prisma/client";
-import { useState } from "react";
-import dayjs from "dayjs";
 import "dayjs/locale/nb";
 
-interface WinnerPickerProps {
-  caches: Cache[];
-  logs: Log[];
-}
+import { Cache, Log } from "@prisma/client";
+import { useEffect, useRef, useState } from "react";
 
-interface LogWithPoints {
-  name: string;
-  point: number;
-  gc: string;
+import { LogWithPoints } from "./type";
+import dayjs from "dayjs";
+
+interface WinnerPickerProps {
+  logsByName: {
+    [key: string]: LogWithPoints[];
+  };
 }
 
 interface LogTickets {
@@ -21,82 +19,25 @@ interface LogTickets {
   number: number;
 }
 
-export function WinnerPicker({ caches, logs }: WinnerPickerProps) {
+export function WinnerPicker({ logsByName }: WinnerPickerProps) {
   const [firstPlace, setFirstPlace] = useState<number>();
   const [secondPlace, setSecondPlace] = useState<number>();
   const [thirdPlace, setThirdPlace] = useState<number>();
   const [logsTickets, setLogsTickets] = useState<LogTickets[]>([]);
 
-  let ticketNumber = 1;
-  let loopPicking = 0;
+  useEffect(() => {
+    setLogsTickets(
+      Object.entries(logsByName).map(([name, logs]) => ({
+        name,
+        number: logs.length,
+      }))
+    );
+  }, [logsByName]);
 
-  function calculatePoints() {
-    const onPDay = 3;
-    const owner = 3;
-    const onWeekend = 2;
-    const inDecember = 1;
-
-    const logWithPoints: LogWithPoints[] = [];
-    const newLogTickets: LogTickets[] = [];
-
-    const sortedLogs = groupBy(logs, "gc");
-
-    for (const cache of caches) {
-      const logs = sortedLogs[cache.gc];
-      const publishDate = new Date(cache.date);
-
-      // Points to owner
-      logWithPoints.push({ name: cache.owner, gc: cache.gc, point: owner });
-      for (let i = 0; i < owner; i++) {
-        newLogTickets.push({ name: cache.owner, number: ticketNumber });
-        ticketNumber++;
-      }
-
-      // Points for logs
-      if (logs?.length > 0) {
-        for (const log of logs) {
-          const logDate = new Date(log.date);
-
-          if (dayjs(publishDate).isSame(logDate, "day")) {
-            logWithPoints.push({ name: log.name, gc: log.gc, point: onPDay });
-            for (let i = 0; i < onPDay; i++) {
-              newLogTickets.push({ name: log.name, number: ticketNumber });
-              ticketNumber++;
-            }
-          } else if (dayjs(publishDate).locale("nb").isSame(logDate, "week")) {
-            const dayOfWeek = logDate.getDay();
-            if (dayOfWeek === 6 || dayOfWeek === 0) {
-              logWithPoints.push({
-                name: log.name,
-                gc: log.gc,
-                point: onWeekend,
-              });
-              for (let i = 0; i < onWeekend; i++) {
-                newLogTickets.push({ name: log.name, number: ticketNumber });
-                ticketNumber++;
-              }
-            }
-          } else {
-            logWithPoints.push({
-              name: log.name,
-              gc: log.gc,
-              point: inDecember,
-            });
-            for (let i = 0; i < inDecember; i++) {
-              newLogTickets.push({ name: log.name, number: ticketNumber });
-              ticketNumber++;
-            }
-          }
-        }
-      }
-    }
-
-    setLogsTickets(newLogTickets);
-    return logWithPoints;
-  }
+  const loopPicking = useRef(0);
 
   function pickWinners(place: number) {
-    loopPicking = 0;
+    loopPicking.current = 0;
     const numberIfLoops = Math.floor(Math.random() * 20) + 5;
     switch (place) {
       case 1:
@@ -116,8 +57,8 @@ export function WinnerPicker({ caches, logs }: WinnerPickerProps) {
   function findFirstPlace(numberIfLoops: number) {
     const myTimeout = setTimeout(() => {
       setFirstPlace(Math.floor(Math.random() * logsTickets.length));
-      loopPicking++;
-      if (loopPicking < numberIfLoops) {
+      loopPicking.current++;
+      if (loopPicking.current < numberIfLoops) {
         findFirstPlace(numberIfLoops);
       } else {
         pickWinners(2);
@@ -129,8 +70,8 @@ export function WinnerPicker({ caches, logs }: WinnerPickerProps) {
   function findSecondPlace(numberIfLoops: number) {
     const myTimeout = setTimeout(() => {
       setSecondPlace(Math.floor(Math.random() * logsTickets.length));
-      loopPicking++;
-      if (loopPicking < numberIfLoops) {
+      loopPicking.current++;
+      if (loopPicking.current < numberIfLoops) {
         findSecondPlace(numberIfLoops);
       } else {
         pickWinners(3);
@@ -142,8 +83,8 @@ export function WinnerPicker({ caches, logs }: WinnerPickerProps) {
   function findThirdPlace(numberIfLoops: number) {
     const myTimeout = setTimeout(() => {
       setThirdPlace(Math.floor(Math.random() * logsTickets.length));
-      loopPicking++;
-      if (loopPicking < numberIfLoops) {
+      loopPicking.current++;
+      if (loopPicking.current < numberIfLoops) {
         findThirdPlace(numberIfLoops);
       }
       clearTimeout(myTimeout);
@@ -152,6 +93,7 @@ export function WinnerPicker({ caches, logs }: WinnerPickerProps) {
 
   const NameOfWinner = ({ place }: { place: number }) => {
     const winner = logsTickets.find((l) => l.number === place);
+    console.log({ place, winner, logsTickets });
     if (winner) return <>{winner.name}</>;
     return <></>;
   };
@@ -160,7 +102,6 @@ export function WinnerPicker({ caches, logs }: WinnerPickerProps) {
     <div>
       <button
         onClick={() => {
-          calculatePoints();
           pickWinners(1);
         }}
         className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 print:hidden"
@@ -186,20 +127,4 @@ export function WinnerPicker({ caches, logs }: WinnerPickerProps) {
       </div>
     </div>
   );
-}
-
-function groupBy(objectArray: Log[], property: "gc") {
-  return objectArray.reduce(function (
-    acc: {
-      [key: string]: Log[];
-    },
-    obj
-  ) {
-    let key = obj[property];
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(obj);
-    return acc;
-  }, {});
 }
