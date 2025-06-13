@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model Cache {
+    id        Int      @id @default(autoincrement())
+    gc        String   @unique
+    name      String
+    date      DateTime
+    owner     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    logs      Log[]
+}
+
+model Log {
+    id        Int      @id @default(autoincrement())
+    gc        String
+    name      String
+    date      DateTime
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    cache     Cache    @relation(fields: [gc], references: [gc])
+}
