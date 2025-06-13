@@ -1,6 +1,8 @@
-import { Cache, Log } from "@prisma/client";
-import dayjs from "dayjs";
 import "dayjs/locale/nb";
+
+import { Cache, Log } from "@prisma/client";
+
+import dayjs from "dayjs";
 
 interface ResultsTableProps {
   caches: Cache[];
@@ -28,13 +30,29 @@ export function ResultsTable({ caches, logs }: ResultsTableProps) {
             {caches.map((c) => (
               <th
                 key={c.gc}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rotate-90 whitespace-nowrap"
+                className="relative text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
+                style={{
+                  height: "120px",
+                  textAlign: "center",
+                  overflow: "hidden",
+                }}
               >
-                {c.gc}
+                <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 -rotate-90 whitespace-nowrap">
+                  {c.gc}
+                </div>
               </th>
             ))}
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rotate-90 whitespace-nowrap">
-              Totalt
+            <th
+              className="relative text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
+              style={{
+                height: "120px",
+                textAlign: "center",
+                overflow: "hidden",
+              }}
+            >
+              <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 -rotate-90 whitespace-nowrap">
+                Totalt
+              </div>
             </th>
           </tr>
         </thead>
